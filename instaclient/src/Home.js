@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
+import jwt_decode from 'jwt-decode';
 // import 'bootstrap/dist/css/bootstrap.css';
 import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
@@ -20,10 +21,20 @@ var myIcon = L.icon({
   popupAnchor: [0, -41],
 });
 
+var myIconPlaceSelected = L.icon({
+  iconUrl: 'http://www.pngall.com/wp-content/uploads/2018/04/GPS-PNG-Picture.png',
+  iconSize: [32, 65],
+  iconAnchor: [18.5, 48],
+  popupAnchor: [0, -47],
+});
+
 class Home extends Component {
   constructor(){
     super()
     this.state = {
+      admin: "",
+      place:"",
+
       name: "",
       message: "",
       location: {
@@ -35,6 +46,13 @@ class Home extends Component {
   }
 
   componentDidMount(){
+    let token = localStorage.getItem('token');
+    const decoded = jwt_decode(token);
+    const admin = decoded.admin;
+    this.setState({
+      admin
+    })
+
     navigator.geolocation.getCurrentPosition((position) =>{
       console.log(position)
       this.setState({
@@ -57,7 +75,7 @@ class Home extends Component {
             lng: location.longitude // EL BLOQUE DEL SERVICIO REDIRECCIONA EL MARKER HASTA MICROCENTRO
           },
           haveUsersLocation: true,
-          zoom: 13
+          zoom: 8
           })
       })
     });
@@ -80,8 +98,8 @@ class Home extends Component {
     console.log(unaPosicion)
   }
 
-  ubicacion(e){
-    console.log(e.latlng)
+  clickMapPlace(e){
+    this.setState({place: e.latlng})
   }
 
   render() {
@@ -96,9 +114,19 @@ class Home extends Component {
     // const icon = [this.state.lat, this.state.lng]
     return (
       <div>
-        <Map onclick={this.ubicacion.bind(this)} style={{height:"100vh"}} center={position} zoom={this.state.zoom}>
+        <Map onclick={this.clickMapPlace.bind(this)} style={{height:"100vh"}} center={position} zoom={this.state.zoom}>
           <TileLayer  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+
+          {
+            this.state.place ?
+              <Marker position={[this.state.place.lat, this.state.place.lng]} icon={myIconPlaceSelected}>
+                <Popup>
+                  {this.state.place.lat} / {this.state.place.lng}
+                </Popup>
+              </Marker>:
+              ""
+          }
           
           <ul>
             {
@@ -130,23 +158,45 @@ class Home extends Component {
           }
         </Map>
 
-        <Card body style={{marginBottom:"10px"}} className="message-form">
-          <CardTitle>Welcome to Mundial Map</CardTitle>
-          <CardText>Leave with your location.</CardText>
-          <CardText>Thanks for choose us.</CardText>
-          <Form onSubmit={this.handlerSubmit}>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <Label for="name" className="mr-sm-2">Name</Label>
-              <Input onChange={this.handlerChange} value={this.state.name} type="text" name="name" id="name" placeholder="Enter your name" />
-            </FormGroup>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <Label for="message" className="mr-sm-2">Message</Label>
-              <Input onChange={this.handlerChange} value={this.state.message} style={{marginBottom:"5px"}} type="textarea" name="message" id="message" placeholder="Enter a message" />
-            </FormGroup>
-            
-            <Button type="submit" color="info">Send</Button>{' '}
-          </Form>
-        </Card>
+        {
+          this.state.admin ?
+            <Card body style={{marginBottom:"10px"}} className="message-form-left">
+              <CardTitle>Welcome to Mundial Map</CardTitle>
+              <CardText>Leave with your location.</CardText>
+              <CardText>Thanks for choose us.</CardText>
+              <Form onSubmit={this.handlerSubmit}>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Label for="name" className="mr-sm-2">Name</Label>
+                  <Input onChange={this.handlerChange} value={this.state.name} type="text" name="name" id="name" placeholder="Enter your name" />
+                </FormGroup>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Label for="message" className="mr-sm-2">Message</Label>
+                  <Input onChange={this.handlerChange} value={this.state.message} style={{marginBottom:"5px"}} type="textarea" name="message" id="message" placeholder="Enter a message" />
+                </FormGroup>
+                
+                <Button type="submit" color="info">Send</Button>{' '}
+              </Form>
+            </Card>
+          :
+            <Card body style={{marginBottom:"10px"}} className="message-form-right">
+              <CardTitle>Welcome to Mundial Map</CardTitle>
+              <CardText>Leave with your location.</CardText>
+              <CardText>Thanks for choose us.</CardText>
+              <Form onSubmit={this.handlerSubmit}>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Label for="name" className="mr-sm-2">Name</Label>
+                  <Input onChange={this.handlerChange} value={this.state.name} type="text" name="name" id="name" placeholder="Enter your name" />
+                </FormGroup>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Label for="message" className="mr-sm-2">Message</Label>
+                  <Input onChange={this.handlerChange} value={this.state.message} style={{marginBottom:"5px"}} type="textarea" name="message" id="message" placeholder="Enter a message" />
+                </FormGroup>
+                
+                <Button type="submit" color="info">Send</Button>{' '}
+              </Form>
+            </Card>
+        }
+        
       </div>
     )
   }

@@ -20,7 +20,8 @@ router.post('/', (req, res) => {
                         const user = new User({
                             email: req.body.email,
                             username: req.body.username,
-                            password: hash
+                            password: hash,
+                            admin: false
                         })
                         user.save()
                             .then(result => {

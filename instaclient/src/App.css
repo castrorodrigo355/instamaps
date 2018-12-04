@@ -31,14 +31,14 @@
   }
 }
 
-.message-form1{
+.message-form-left{
   z-index: 999;
   position: absolute;
   top: 10px;
   left: 10px
 }
 
-.message-form{
+.message-form-right{
   z-index: 999;
   position: absolute;
   top: 10px;
