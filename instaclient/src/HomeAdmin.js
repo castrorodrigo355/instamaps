@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-// import { BrowserRouter, Route } from "react-router-dom"
 import 'leaflet/dist/leaflet.css';
 import jwt_decode from 'jwt-decode';
-// import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input, Table } from 'reactstrap';
-import EventsTable from './EventsTable'
+import EventsTableAdmin from './EventsTableAdmin'
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "./App.css"
@@ -80,21 +78,21 @@ class HomeAdmin extends Component {
         });
       }
 
-      obtenerEventos(){
-        const token = localStorage.getItem('token');
-        fetch(`http://localhost:3000/eventos`, {
-            method: 'GET',
-            headers: {
-                token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(eventos => {
-            this.setState({eventos})
-        })
-        .catch(err => console.log(err));
+    obtenerEventos(){
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:3000/eventos`, {
+          method: 'GET',
+          headers: {
+              token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }
+      })
+      .then(response => response.json())
+      .then(eventos => {
+          this.setState({eventos})
+      })
+      .catch(err => console.log(err));
     }
     
     handlerSubmit = (e) => {
@@ -168,7 +166,7 @@ class HomeAdmin extends Component {
                     : ""
                   }
 
-                  <EventsTable eventos={eventos} />
+                  <EventsTableAdmin eventos={eventos} />
                   
                 </Map>
             </div>

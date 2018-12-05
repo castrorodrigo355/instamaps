@@ -4,9 +4,7 @@ import jwt_decode from 'jwt-decode';
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import FormCreateEvent from './FormCreateEvent'
-// import { BrowserRouter, Route } from "react-router-dom"
-// import Acceso from './Acceso';
-// import Home from './Home3';
+import EventsTableUser from './EventsTableUser'
 import "./App.css"
 
 var myIcon = L.icon({
@@ -28,15 +26,17 @@ class HomeUser extends Component {
     constructor(){
         super()
         this.state = {
-        admin: "",
-        ubicacion:"",
+          eventos: [],
 
-        location: {
-        lat: -50, 
-        lng: -35, 
-        },
-        haveUsersLocation: false,
-        zoom: 2}
+          admin: "",
+          ubicacion:"",
+
+          location: {
+          lat: -50, 
+          lng: -35, 
+          },
+          haveUsersLocation: false,
+          zoom: 2}
     }
 
     componentDidMount(){
@@ -44,7 +44,7 @@ class HomeUser extends Component {
         const decoded = jwt_decode(token);
         const admin = decoded.admin;
         this.setState({admin})
-    
+        this.obtenerEventos()
         navigator.geolocation.getCurrentPosition((position) =>{
           console.log(position)
           this.setState({
@@ -72,6 +72,23 @@ class HomeUser extends Component {
           })
         });
       }
+
+      obtenerEventos(){
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/eventos`, {
+            method: 'GET',
+            headers: {
+                token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(eventos => {
+            this.setState({eventos})
+        })
+        .catch(err => console.log(err));
+      }
     
       handlerSubmit = (e) => {
         e.preventDefault()
@@ -96,6 +113,7 @@ class HomeUser extends Component {
 
     render() {
       const position = [this.state.location.lat, this.state.location.lng]
+      const { eventos } = this.state;
         return (
             <div>
               <Map onclick={this.clickUbicacion.bind(this)} style={{height:"100vh"}} center={position} zoom={this.state.zoom}>
@@ -124,8 +142,8 @@ class HomeUser extends Component {
                 }
               </Map>
 
+              <EventsTableUser eventos={ eventos } />
               <FormCreateEvent ubicacion={this.state.ubicacion} />
-            
           </div>
         );
     }

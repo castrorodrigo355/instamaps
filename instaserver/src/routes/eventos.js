@@ -36,6 +36,37 @@ router.delete("/:id", (req, res) => {
         .catch( err => res.status(503).json(err));
 })
 
+// DADO UN EVENTO "idEvento", OBTENER LA LISTA DE INVITADOS
+router.get("/:idEvento/invitados", (req, res) => {
+    Evento.findById(req.params.idEvento)
+        .then( evento => res.json(evento.invitadosId))
+        .catch( err => res.status(503).json(err));
+})
+
+// DADO UN EVENTO "idEvento", AGREGAR UN INVITADO "idUser"
+router.post("/:idEvento/invitados", (req, res) => {
+    let idUser = req.body;
+    Evento.findOne({_id: req.params.idEvento}, (err, evento) => {
+        err ? res.json(err) :
+        evento.invitadosId.push(idUser)
+        evento.save()
+            .then(result => res.status(201).json(result))
+            .catch(err => res.status(503).json(err));
+    })
+})
+
+// DADO UN EVENTO "idEvento", ELIMINAR UN INVITADO "idUser"
+router.delete("/:idEvento/invitados/:idUser", (req, res) => {
+    // let idUser = req.body;
+    Evento.findOne({_id: req.params.idEvento}, (err, evento) => {
+        err ? res.json(err) :
+        evento.invitadosId = evento.invitadosId.filter(invitado => invitado.idUser != req.params.idUser)
+        evento.save()
+            .then(result => res.status(201).json(result))
+            .catch(err => res.status(503).json(err));
+    })
+})
+
 // // ACTUALIZAR UN DETERMINADO USUARIO MEDIANTE UN "id"
 // router.put("/:id", (req, res) => {
 //     User.findByIdAndUpdate(req.params.id, {$set: {"email": req.body.email, 

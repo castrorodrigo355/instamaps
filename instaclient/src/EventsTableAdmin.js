@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Card, CardTitle, Table } from 'reactstrap';
-// import jwt_decode from 'jwt-decode';
-// import { BrowserRouter, Route } from "react-router-dom"
-// import Acceso from './Acceso';
 import "./App.css"
 
 class EventsTable extends Component {

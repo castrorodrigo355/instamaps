@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
                             email: req.body.email,
                             username: req.body.username,
                             password: hash,
-                            admin: false
+                            admin: true
                         })
                         user.save()
                             .then(result => {
