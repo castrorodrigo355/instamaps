@@ -63,7 +63,7 @@ class EventsTable extends Component {
                     <div className="card-header" id="headingOne">
                         <h5 className="mb-0">
                             <button className="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            <h4><span className="badge badge-pill badge-info">Listado de eventos</span></h4>
+                            <h4><span className="badge badge-pill badge-danger">Listado de eventos</span></h4>
                             </button>
                         </h5>
                     </div>
