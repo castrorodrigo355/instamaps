@@ -20,6 +20,9 @@ const routerUsuarios = require("./routes/usuarios");
 app.use("/usuarios", authValidator, routerUsuarios);
 // app.use("/usuarios", routerUsuarios);
 // ----------------------------------------------------------
+const routerEventos = require("./routes/eventos");
+app.use("/eventos", authValidator, routerEventos);
+// ----------------------------------------------------------
 app.get("/*", (req, res) => {
     res.end("Archivo no encontrado");
 });
