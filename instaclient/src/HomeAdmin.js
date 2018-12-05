@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 // import { BrowserRouter, Route } from "react-router-dom"
 import 'leaflet/dist/leaflet.css';
 import jwt_decode from 'jwt-decode';
-import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input, Table } from 'reactstrap';
+// import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input, Table } from 'reactstrap';
+import EventsTable from './EventsTable'
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "./App.css"
@@ -16,8 +17,8 @@ var myIcon = L.icon({
   
   var myIconPlaceSelected = L.icon({
     iconUrl: 'http://www.pngall.com/wp-content/uploads/2018/04/GPS-PNG-Picture.png',
-    iconSize: [32, 65],
-    iconAnchor: [18.5, 48],
+    iconSize: [32, 46],
+    iconAnchor: [18.5, 50],
     popupAnchor: [0, -47],
   });
 
@@ -143,7 +144,7 @@ class HomeAdmin extends Component {
                           <div key={i}>
                             <Marker position={[unEvento.ubicacion[0].ubicacion.lat, 
                                               unEvento.ubicacion[0].ubicacion.lng]}
-                                    icon={myIcon}
+                                    icon={myIconPlaceSelected}
                                     // onclick={this.seleccionarUbicacion.bind(this, unaPosicion)}
                                     >
                               {/* <Popup>
@@ -167,33 +168,8 @@ class HomeAdmin extends Component {
                     : ""
                   }
 
-                  <Card body style={{marginBottom:"10px"}} className="message-form-left">
-                    <CardTitle>Eventos</CardTitle>
-                    <Table dark>
-                      <thead>
-                        <tr>
-                          <th>Fecha</th>
-                          <th>Evento</th>
-                          <th>Usuario</th>
-                          <th>Ubicacion</th>
-                        </tr>
-                      </thead>
-                      {
-                        eventos && eventos.map((unEvento, i) => {
-                          return(
-                            <tbody key={i}>
-                              <tr>
-                                <td>{unEvento.fecha}</td>
-                                <td>{unEvento.tipoEvento}</td>
-                                <td>{unEvento.userIdCreator}</td>
-                                <td>{unEvento.ubicacion[0].ubicacion.lat}</td>
-                              </tr>
-                            </tbody>
-                          )
-                        })
-                      }    
-                    </Table>
-                  </Card>
+                  <EventsTable eventos={eventos} />
+                  
                 </Map>
             </div>
         );

@@ -4,6 +4,7 @@ var eventoSchema = new Schema({
     tipoEvento: { type: String, required: true },
     descripcion: { type: String, required: true},
     ubicacion: { type: Array, required: true},
+    userEmail: { type: String, required: true},
     userIdCreator: {type: String, required: true}
 })
 
