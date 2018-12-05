@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { BrowserRouter, Route } from "react-router-dom"
 import 'leaflet/dist/leaflet.css';
 import jwt_decode from 'jwt-decode';
-import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Card, Button, CardTitle, CardText, Form, FormGroup, Label, Input, Table } from 'reactstrap';
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "./App.css"
@@ -168,21 +168,31 @@ class HomeAdmin extends Component {
                   }
 
                   <Card body style={{marginBottom:"10px"}} className="message-form-left">
-                    <CardTitle>Welcome to Mundial Map</CardTitle>
-                    <CardText>Leave with your location.</CardText>
-                    <CardText>Thanks for choose us.</CardText>
-                    <Form onSubmit={this.handlerSubmit}>
-                      <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                        <Label for="name" className="mr-sm-2">Name</Label>
-                        <Input onChange={this.handlerChange} value={this.state.name} type="text" name="name" id="name" placeholder="Enter your name" />
-                      </FormGroup>
-                      <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                        <Label for="message" className="mr-sm-2">Message</Label>
-                        <Input onChange={this.handlerChange} value={this.state.message} style={{marginBottom:"5px"}} type="textarea" name="message" id="message" placeholder="Enter a message" />
-                      </FormGroup>
-                      
-                      <Button type="submit" color="info">Send</Button>{' '}
-                    </Form>
+                    <CardTitle>Eventos</CardTitle>
+                    <Table dark>
+                      <thead>
+                        <tr>
+                          <th>Fecha</th>
+                          <th>Evento</th>
+                          <th>Usuario</th>
+                          <th>Ubicacion</th>
+                        </tr>
+                      </thead>
+                      {
+                        eventos && eventos.map((unEvento, i) => {
+                          return(
+                            <tbody key={i}>
+                              <tr>
+                                <td>{unEvento.fecha}</td>
+                                <td>{unEvento.tipoEvento}</td>
+                                <td>{unEvento.userIdCreator}</td>
+                                <td>{unEvento.ubicacion[0].ubicacion.lat}</td>
+                              </tr>
+                            </tbody>
+                          )
+                        })
+                      }    
+                    </Table>
                   </Card>
                 </Map>
             </div>
